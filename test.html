@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันตัวตน - ธนาคารกรุงศรีอยุธยา</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #2c2c2c;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #8B7E5B;
+            border-radius: 32px;
+            padding: 45px 40px 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #FFFFFF;
+            font-size: 16px;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .phone-number {
+            color: #F4C430;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 35px;
+            letter-spacing: 0.5px;
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .otp-input {
+            width: 52px;
+            height: 52px;
+            border: 2.5px solid #F4C430;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+            background: #FFFFFF;
+            transition: all 0.2s ease;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #F4C430;
+            box-shadow: 0 0 0 2px rgba(244, 196, 48, 0.3);
+            transform: scale(1.02);
+        }
+
+        .otp-input.filled {
+            border-color: #F4C430;
+            background: #FFFFFF;
+        }
+
+        .timer-section {
+            margin-bottom: 25px;
+        }
+
+        .timer-text {
+            color: #FFFFFF;
+            font-size: 16px;
+            margin-bottom: 2px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .timer {
+            color: #F4C430;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .resend-section {
+            margin-bottom: 35px;
+        }
+
+        .resend-text {
+            color: #FFFFFF;
+            font-size: 14px;
+            margin-bottom: 4px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #F4C430;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .resend-btn:hover:not(:disabled) {
+            color: #E6B800;
+        }
+
+        .resend-btn:disabled {
+            color: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .verify-btn {
+            width: 100%;
+            background: #F4C430;
+            color: #FFFFFF;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(244, 196, 48, 0.3);
+        }
+
+        .verify-btn:hover:not(:disabled) {
+            background: #E6B800;
+            box-shadow: 0 4px 12px rgba(244, 196, 48, 0.4);
+        }
+
+        .verify-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #999999;
+            box-shadow: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 35px 25px 40px 25px;
+                margin: 15px;
+                border-radius: 24px;
+                max-width: 380px;
+            }
+            
+            .otp-container {
+                gap: 8px;
+            }
+            
+            .otp-input {
+                width: 46px;
+                height: 46px;
+                font-size: 20px;
+                border-radius: 10px;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+            
+            .verify-btn {
+                font-size: 16px;
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .otp-container {
+                gap: 6px;
+            }
+            
+            .otp-input {
+                width: 42px;
+                height: 42px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">ยืนยันตัวตน</h1>
+        <p class="subtitle">กรุณาใส่รหัส OTP ที่ส่งไปยัง</p>
+        <div class="phone-number">0xx-xxx-4321</div>
+        
+        <div class="otp-container">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" inputmode="numeric">
+        </div>
+        
+        <div class="timer-section">
+            <div class="timer-text">หมดอายุใน</div>
+            <div class="timer" id="timer">xx วินาที</div>
+        </div>
+        
+        <div class="resend-section">
+            <p class="resend-text">ไม่ได้รับรหัส?</p>
+            <button class="resend-btn" id="resendBtn" disabled>ส่งรหัสใหม่</button>
+        </div>
+        
+        <button class="verify-btn" id="verifyBtn" disabled>ยืนยัน</button>
+    </div>
+
+    <script>
+        let timeLeft = 120; // 2 minutes
+        let timerInterval;
+        
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const resendBtn = document.getElementById('resendBtn');
+        const timerDisplay = document.getElementById('timer');
+        
+        // OTP Input functionality
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                let value = e.target.value;
+                
+                // Remove any non-digit characters
+                value = value.replace(/\D/g, '');
+                
+                // Take only the first digit
+                if (value.length > 1) {
+                    value = value[0];
+                }
+                
+                e.target.value = value;
+                
+                // Add filled class and move to next input
+                if (value) {
+                    e.target.classList.add('filled');
+                    if (index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                } else {
+                    e.target.classList.remove('filled');
+                }
+                
+                checkOTPComplete();
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                // Handle backspace
+                if (e.key === 'Backspace') {
+                    if (!e.target.value && index > 0) {
+                        otpInputs[index - 1].focus();
+                        otpInputs[index - 1].value = '';
+                        otpInputs[index - 1].classList.remove('filled');
+                    }
+                    checkOTPComplete();
+                }
+                
+                // Handle arrow keys
+                if (e.key === 'ArrowLeft' && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+                if (e.key === 'ArrowRight' && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                
+                // Only allow numbers, backspace, delete, and arrow keys
+                if (!/[\d]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text');
+                const digits = pastedData.replace(/\D/g, '').slice(0, 6);
+                
+                // Clear all inputs
+                otpInputs.forEach(inp => {
+                    inp.value = '';
+                    inp.classList.remove('filled');
+                });
+                
+                // Fill with pasted digits
+                digits.split('').forEach((digit, i) => {
+                    if (otpInputs[i]) {
+                        otpInputs[i].value = digit;
+                        otpInputs[i].classList.add('filled');
+                    }
+                });
+                
+                // Focus appropriate input
+                if (digits.length < 6) {
+                    otpInputs[digits.length].focus();
+                } else {
+                    otpInputs[5].focus();
+                }
+                
+                checkOTPComplete();
+            });
+        });
+        
+        function checkOTPComplete() {
+            const allFilled = Array.from(otpInputs).every(input => input.value);
+            verifyBtn.disabled = !allFilled;
+        }
+        
+        // Timer functionality
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timerDisplay.textContent = ${timeLeft} วินาที;
+            } else {
+                timerDisplay.textContent = '0 วินาที';
+            }
+        }
+        
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = 'หมดเวลา';
+                    resendBtn.disabled = false;
+                    
+                    // Disable inputs when expired
+                    otpInputs.forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.5';
+                    });
+                    verifyBtn.disabled = true;
+                }
+            }, 1000);
+        }
+        
+        // Resend functionality
+        resendBtn.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timeLeft = 120;
+            resendBtn.disabled = true;
+            
+            // Re-enable inputs
+            otpInputs.forEach(input => {
+                input.disabled = false;
+                input.style.opacity = '1';
+                input.value = '';
+                input.classList.remove('filled');
+            });
+            
+            verifyBtn.disabled = true;
+            
+            // Simulate sending
+            setTimeout(() => {
+                startTimer();
+                otpInputs[0].focus();
+            }, 1000);
+        });
+        
+        // Verify functionality
+        verifyBtn.addEventListener('click', () => {
+            const otp = Array.from(otpInputs).map(input => input.value).join('');
+            const originalText = verifyBtn.textContent;
+            
+            verifyBtn.textContent = 'กำลังตรวจสอบ...';
+            verifyBtn.disabled = true;
+            
+            // Simulate verification
+            setTimeout(() => {
+                // You can customize this logic
+                if (otp === '123456') {
+                    verifyBtn.textContent = 'สำเร็จ!';
+                    verifyBtn.style.background = '#4CAF50';
+                    clearInterval(timerInterval);
+                    
+                    setTimeout(() => {
+                        alert('ยืนยันตัวตนสำเร็จ! 🎉');
+                    }, 500);
+                } else {
+                    verifyBtn.textContent = 'รหัสไม่ถูกต้อง';
+                    verifyBtn.style.background = '#f44336';
+                    
+                    // Clear inputs
+                    otpInputs.forEach(input => {
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    
+                    setTimeout(() => {
+                        verifyBtn.textContent = originalText;
+                        verifyBtn.style.background = '#F4C430';
+                        verifyBtn.disabled = true;
+                        otpInputs[0].focus();
+                    }, 2000);
+                }
+            }, 1500);
+        });
+        
+        // Initialize
+        startTimer();
+        otpInputs[0].focus();
+        
+        // Handle Enter key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !verifyBtn.disabled) {
+                verifyBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

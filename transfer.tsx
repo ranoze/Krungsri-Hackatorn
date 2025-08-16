@@ -4,7 +4,6 @@ import { checkRiskAccount } from "../components/RiskAlertModal";
 
 export default function Transfer() {
   const [accountNumber, setAccountNumber] = useState("");
-  const [receiverName, setReceiverName] = useState("");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
 
@@ -12,18 +11,18 @@ export default function Transfer() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ accountNumber, receiverName, amount, note });
+    console.log({ accountNumber, amount, note });
 
     if (isNaN(Number(amount)) || Number(amount) <= 0) {
       alert("กรุณากรอกจำนวนเงินที่ถูกต้อง");
       return;
     }
 
-    if (!accountNumber || !receiverName || !amount) {
+    if (!accountNumber || !amount) {
       alert("กรุณากรอกข้อมูลให้ครบ");
       return;
     }
-    const risk = checkRiskAccount(receiverName) ? 1 : 0;
+    const risk = checkRiskAccount(accountNumber) ? 1 : 0;
     if (risk) {
       alert("บัญชีนี้มีความเสี่ยง กรุณายืนยันตัวตนด้วย OTP หรือ QR Code");
       router.push({
@@ -52,14 +51,6 @@ export default function Transfer() {
             style={styles.input}
           />
 
-          <label style={styles.label}>ชื่อผู้รับเงิน</label>
-          <input
-            type="text"
-            placeholder="นายธนาคาร"
-            value={receiverName}
-            onChange={(e) => setReceiverName(e.target.value)}
-            style={styles.input}
-          />
 
           <label style={styles.label}>จำนวนเงิน</label>
           <input

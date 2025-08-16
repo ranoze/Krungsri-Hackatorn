@@ -19,7 +19,7 @@ export default function Verify() {
 
   const handleOTPButtonClick = () => {
     router.push({
-      pathname: "/page",
+      pathname: "/OTPFORM",
 
     });
     // โลจิกสำหรับการกดปุ่ม "ยืนยันตัวตนด้วย OTP"

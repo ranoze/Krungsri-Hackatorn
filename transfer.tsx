@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { checkRiskAccount } from "../components/RiskAlertModal";
 
 export default function Transfer() {
   const [accountNumber, setAccountNumber] = useState("");
@@ -22,15 +23,18 @@ export default function Transfer() {
       alert("กรุณากรอกข้อมูลให้ครบ");
       return;
     }
-    router.push({
-      pathname: "/verify",
-      query: {
-        accountNumber,
-        receiverName,
-        amount,
-        note,
-      },
-    });
+    const risk = checkRiskAccount(receiverName) ? 1 : 0;
+    if (risk) {
+      alert("บัญชีนี้มีความเสี่ยง กรุณายืนยันตัวตนด้วย OTP หรือ QR Code");
+      router.push({
+        pathname: "/verify",
+        query: { amount, risk },
+      });
+      return;
+    } else {
+      router.push(`/result?success=1&amount=${amount}`);
+    }
+    // สมมติว่าโอนเงินสำเร็จ
   };
   return (
     <div style={styles.page}>

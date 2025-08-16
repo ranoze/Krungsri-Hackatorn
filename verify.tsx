@@ -6,7 +6,7 @@ export default function Verify() {
   const [otp, setOtp] = useState('');
   const router = useRouter();
   const amount = router.query.amount || 0;
-  const risk = router.query.risk === '1';
+
 
   const handleVerify = () => {
     // สมมติว่า OTP ที่ถูกต้องคือ '123456'
